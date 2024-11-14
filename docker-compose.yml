@@ -1,0 +1,68 @@
+version: '3.8'
+
+networks:
+  dev:
+
+
+services:
+
+  web:
+    build: ./backend
+    command: >
+      bash -c "./manage.py collectstatic --noinput && ./manage.py makemigrations && ./manage.py migrate && gunicorn -b 0.0.0.0:8000 mysite.wsgi:application"
+    volumes:
+      - .:/code
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - dev
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dev
+
+  frontend:
+    build:
+      context: ./FrontEnd
+    ports:
+      - "3000:3000"
+
+    networks:
+      - dev
+
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - web
+      - frontend
+    networks:
+      - dev
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+
+
+
+
