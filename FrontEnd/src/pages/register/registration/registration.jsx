@@ -31,7 +31,7 @@ const Registration = () => {
   }, [dispatch])
   const handleonSubmit = (e) => {
     e.preventDefault()
-    const usersId = !users.length ? users[users.length - 1].id + 1 : 1 
+    const usersId = users.length ? users[users.length - 1].id + 1 : 1
     if (name.trim().length && email.trim().length && tg.trim().length) {
         const data = {
             "id": usersId,
