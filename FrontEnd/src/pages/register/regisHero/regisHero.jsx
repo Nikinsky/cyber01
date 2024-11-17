@@ -9,19 +9,18 @@ const RegisHero = () => {
       seconds: 0
   });
 
+
 useEffect(() => {
     const targetDate = new Date('2024-11-24T00:00:00');
-
     const calculateTimeLeft = () => {
         const now = new Date();
         const difference = targetDate - now;
-
+      
         if (difference > 0) {
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((difference / 1000 / 60) % 60);
             const seconds = Math.floor((difference / 1000) % 60);
-
             setTimeLeft({ days, hours, minutes, seconds });
         }
     };
