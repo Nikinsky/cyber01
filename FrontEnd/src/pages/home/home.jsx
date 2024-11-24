@@ -1,18 +1,39 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import s from "./home.module.css"
 import { NavLink } from 'react-router-dom';
 const Home = () => {
     useEffect(() => {
         window.scrollTo(10, 0);
     }, []);
-    return (
+
+    const arrVideos = [
+        "/bg.mp4",
+        "/bg2.mp4",
+        "/bg3.mp4"
+    ]
+
+
+    const randomIndex = Math.floor(Math.random() * arrVideos.length)
+    console.log(randomIndex);
+    
+    const [isVideo, setIsVideo] = useState(randomIndex)
+    const handleVideoEnd = () => {
+        setIsVideo((prevIndex) => {
+            if (isVideo === arrVideos.length) {
+                return 0
+            }
+            return prevIndex + 1
+        }) 
+        console.log(isVideo);
         
+    }
+
+    return (
         <div className={s.home}>
             <div className={s.video}>
-                <video  autoPlay muted loop className={s.bg_video}>
-                    <source src="/bg4.mp4" type='video/mp4' />
+                <video onEnded={handleVideoEnd} autoPlay muted  className={s.bg_video}>
+                    <source src={arrVideos[isVideo]} type='video/mp4' />
                 </video>
-
                 <section className={s.hero}>
                     <div className="container">
                         <div className={s.info}>
